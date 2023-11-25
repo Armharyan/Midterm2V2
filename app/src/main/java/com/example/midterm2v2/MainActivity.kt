@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -92,6 +93,7 @@ class PostViewModel : ViewModel() {
 
 @Composable
 fun PostList(posts: List<Post>) {
+    var tempID = 0
     LazyColumn {
         items(posts) { post ->
             Column(
@@ -99,31 +101,39 @@ fun PostList(posts: List<Post>) {
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
+                if (tempID != post.userId) {
+                    tempID = post.userId
+                    Text(
+                        text = "User ID: " + post.userId.toString(),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
+
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        Text(
-                            text = post.userId.toString(),
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        Text(
-                            text = post.title,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        Text(
-                            text = post.body,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
+                        if (tempID != 0) {
+                            Text(
+                                text = "Title: " + post.title,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = post.body,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
